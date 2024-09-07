@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mental Health Facilities in Kenya</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; }
+        .small-red-dot {
+            background-color: red;
+            border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mental Health Facilities in Kenya</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([-1.2921, 36.8219], 6); // Centered on Nairobi, Kenya
+
+        // Add a tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Custom icon for small red dot
+        var smallRedDot = L.divIcon({
+            className: 'small-red-dot',
+            iconSize: [8, 8]
+        });
+
+        // URL to the CSV data
+        var dataUrl = "https://hub.arcgis.com/datasets/Esri-EA::health-facilities-in-kenya.csv";
+
+        // Fetch and parse the CSV data
+        Papa.parse(dataUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                var data = results.data;
+
+                // Sample 8% of the data
+                var sampleSize = Math.floor(data.length * 0.08);
+                var sampledData = data.sort(() => 0.5 - Math.random()).slice(0, sampleSize);
+
+                // Loop through the sampled data and add markers to the map
+                sampledData.forEach(function(facility) {
+                    if (facility.Latitude && facility.Longitude) {
+                        var lat = parseFloat(facility.Latitude);
+                        var lon = parseFloat(facility.Longitude);
+                        L.marker([lat, lon], { icon: smallRedDot }).addTo(map)
+                            .bindPopup(`<b>${facility.FacilityName}</b><br>${facility.FacilityType}`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
