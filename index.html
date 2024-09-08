@@ -1,67 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Mental Health Facilities in Kenya</title>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        #map { height: 600px; }
-        .small-red-dot {
-            background-color: red;
-            border-radius: 50%;
-            width: 8px;
-            height: 8px;
-            display: inline-block;
-        }
-    </style>
+    <title>Green Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1>Mental Health Facilities in Kenya</h1>
-    <div id="map"></div>
+    <header>
+        <div class="container">
+            <h1>Green Marketplace</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script>
-        // Initialize the map
-        var map = L.map('map').setView([-1.2921, 36.8219], 6); // Centered on Nairobi, Kenya
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Shop Eco-Friendly Products</h2>
+                <p>Discover our range of sustainable and green products.</p>
+            </div>
+        </section>
 
-        // Add a tile layer to the map
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        <section class="products">
+            <div class="container">
+                <h2>Product Categories</h2>
+                <div class="category-cards">
+                    <div class="card">
+                        <img src="recycled-products.jpg" alt="Recycled Products">
+                        <h3>Recycled Products</h3>
+                        <p>Eco-friendly items made from recycled materials.</p>
+                        <a href="#" class="btn">Shop Now</a>
+                    </div>
+                    <div class="card">
+                        <img src="biodegradable-products.jpg" alt="Biodegradable Products">
+                        <h3>Biodegradable Products</h3>
+                        <p>Products that break down naturally and reduce waste.</p>
+                        <a href="#" class="btn">Shop Now</a>
+                    </div>
+                    <div class="card">
+                        <img src="organic-products.jpg" alt="Organic Products">
+                        <h3>Organic Products</h3>
+                        <p>High-quality items produced without synthetic chemicals.</p>
+                        <a href="#" class="btn">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        // Custom icon for small red dot
-        var smallRedDot = L.divIcon({
-            className: 'small-red-dot',
-            iconSize: [8, 8]
-        });
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Green Marketplace. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
 
-        // URL to the CSV data
-        var dataUrl = "https://hub.arcgis.com/datasets/Esri-EA::health-facilities-in-kenya.csv";
-
-        // Fetch and parse the CSV data
-        Papa.parse(dataUrl, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                var data = results.data;
-
-                // Sample 8% of the data
-                var sampleSize = Math.floor(data.length * 0.08);
-                var sampledData = data.sort(() => 0.5 - Math.random()).slice(0, sampleSize);
-
-                // Loop through the sampled data and add markers to the map
-                sampledData.forEach(function(facility) {
-                    if (facility.Latitude && facility.Longitude) {
-                        var lat = parseFloat(facility.Latitude);
-                        var lon = parseFloat(facility.Longitude);
-                        L.marker([lat, lon], { icon: smallRedDot }).addTo(map)
-                            .bindPopup(`<b>${facility.FacilityName}</b><br>${facility.FacilityType}`);
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>
